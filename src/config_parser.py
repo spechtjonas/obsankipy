@@ -33,41 +33,94 @@ class VaultConfig(BaseModel):
             raise ValueError(f"Path {v} does not exist")
         return Path(v)
 
+# class RegexConfig(BaseModel):
+#     basic: Optional[List[str]] = []
+#     basic_reversed: Optional[List[str]] = []
+#     type_answer: Optional[List[str]] = []
+#     cloze: Optional[List[str]] = []
+#     obsidian: Optional[List[str]] = []
 
-class RegexConfig(BaseModel):
-    basic: Optional[List[str]] = []
-    basic_reversed: Optional[List[str]] = []
-    type_answer: Optional[List[str]] = []
-    cloze: Optional[List[str]] = []
+#     def get_note_types(self):
+#         note_types = []
+#         if self.basic:
+#             note_types.append(
+#                 NoteType(
+#                     regexes=self.basic,
+#                     note_variant=NoteVariant.BASIC,
+#                 )
+#             )
+#         if self.basic_reversed:
+#             note_types.append(
+#                 NoteType(
+#                     regexes=self.basic_reversed,
+#                     note_variant=NoteVariant.BASIC_AND_REVERSED_CARD,
+#                 )
+#             )
+#         if self.type_answer:
+#             note_types.append(
+#                 NoteType(
+#                     regexes=self.type_answer,
+#                     note_variant=NoteVariant.BASIC_TYPE_ANSWER,
+#                 )
+#             )
+#         if self.cloze:
+#             note_types.append(
+#                 NoteType(
+#                     regexes=self.cloze,
+#                     note_variant=NoteVariant.CLOZE,
+#                 )
+#             )
+#         if self.obsidian:
+#             note_types.append(
+#                 NoteType(
+#                     regexes=self.obsidian,
+#                     note_variant=NoteVariant.OBSIDIAN,
+#                 )
+#             )
+#         return note_types
+
+class NotetypeConfig(BaseModel):
+    Basic: Optional[dict] = {}
+    basic_reversed: Optional[dict] = {}
+    type_answer: Optional[dict] = {}
+    cloze: Optional[dict] = {}
+    Obsidian: Optional[dict] = {}
 
     def get_note_types(self):
         note_types = []
-        if self.basic:
+        if self.Basic:
             note_types.append(
                 NoteType(
-                    regexes=self.basic,
+                    note_type=self.Basic,
                     note_variant=NoteVariant.BASIC,
                 )
             )
-        if self.basic_reversed:
+        # if self.basic_reversed:
+        #     note_types.append(
+        #         NoteType(
+        #             regexes=self.basic_reversed,
+        #             note_variant=NoteVariant.BASIC_AND_REVERSED_CARD,
+        #         )
+        #     )
+        # if self.type_answer:
+        #     note_types.append(
+        #         NoteType(
+        #             regexes=self.type_answer,
+        #             note_variant=NoteVariant.BASIC_TYPE_ANSWER,
+        #         )
+        #     )
+        # if self.cloze:
+        #     note_types.append(
+        #         NoteType(
+        #             regexes=self.cloze,
+        #             note_variant=NoteVariant.CLOZE,
+        #         )
+        #     )
+        if self.Obsidian:
             note_types.append(
                 NoteType(
-                    regexes=self.basic_reversed,
-                    note_variant=NoteVariant.BASIC_AND_REVERSED_CARD,
-                )
-            )
-        if self.type_answer:
-            note_types.append(
-                NoteType(
-                    regexes=self.type_answer,
-                    note_variant=NoteVariant.BASIC_TYPE_ANSWER,
-                )
-            )
-        if self.cloze:
-            note_types.append(
-                NoteType(
-                    regexes=self.cloze,
-                    note_variant=NoteVariant.CLOZE,
+                    note_type=self.Obsidian,
+                    note_variant=NoteVariant.OBSIDIAN,
                 )
             )
         return note_types
@@ -80,11 +133,13 @@ class GlobalConfig(BaseModel):
 class NewConfig(BaseModel):
     globals: GlobalConfig
     vault: VaultConfig
-    regex: Optional[RegexConfig]
+    notetypes: NotetypeConfig
+    # regex: Optional[RegexConfig]
+    # mapping: Optional[MappingConfig]
     hashes_cache_dir: Annotated[str, Field(validate_default=True)] = ""
 
     def get_note_types(self):
-        return self.regex.get_note_types()
+        return self.notetypes.get_note_types()
 
     @field_validator("hashes_cache_dir", mode="after")
     def dir_path_must_exist(cls, v, info: ValidationInfo):

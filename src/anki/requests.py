@@ -62,7 +62,7 @@ class AnkiAddNotesRequest:
             ]
         }
     }
-    becareful when setting the target deck, because if it does not exist, the adding procedure will fail because of ankiconnect.
+    be careful when setting the target deck, because if it does not exist, the adding procedure will fail because of ankiconnect.
     """
 
     notes: List[Note]

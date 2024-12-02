@@ -34,7 +34,7 @@ OBS_INLINE_MATH_REGEX = re.compile(OBS_INLINE_MATH_PATTERN)
 OBS_DISPLAY_MATH_PATTERN = "\$\$([\s\S]*?)\$\$"
 OBS_DISPLAY_MATH_REGEX = re.compile(OBS_DISPLAY_MATH_PATTERN)
 
-ID_REGEX_PATTERN = r"(?P<id_str><!--ID: (?P<id_num>\d+)-->)?(?P<delete>#DELETE)?"  # this regex will be appended to the main regex to check for the id and delete tag, they will be optional
+ID_REGEX_PATTERN = r"(?P<delete>DELETE *)?\n(?P<id_str><!--ID: (?P<id_num>\d+)-->)?"  # this regex will be appended to the main regex to check for the id and delete tag, they will be optional
 
-ID_DELETE_REGEX_PATTERN = r"(?P<id_str><!--ID: (?P<id_num>\d+)-->(?P<delete>#DELETE))\b"  # this regex will match the id and the delete tag, they are required in order to match
+ID_DELETE_REGEX_PATTERN = r"(?P<id_str><!--ID: (?P<id_num>\d+)-->(?P<delete>DELETE))\b"  # this regex will match the id and the delete tag, they are required in order to match
 ID_DELETE_REGEX = re.compile(ID_DELETE_REGEX_PATTERN)

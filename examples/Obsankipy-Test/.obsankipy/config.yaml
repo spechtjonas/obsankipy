@@ -1,0 +1,25 @@
+hashes_cache_dir: .\examples\Obsankipy-Test\.obsankipy
+vault:
+  dir_path: .\examples\Obsankipy-Test
+  medias_dir_path: .\examples\Obsankipy-Test\800 - Media
+  exclude_dotted_dirs_from_scan: true # excludes directories that start with a dot
+  exclude_dirs_from_scan:
+    - 000 - MOCs
+  file_patterns_to_exclude:
+    - ".*" # excludes files that start with a dot
+    - "_*" # excludes files that start with an underscore
+notetypes:
+  Obsidian:
+    regexes:
+        - '^#+ (?:(?:Abkürzung *\n+((?:(?:^[^\n#].{0,2}$|^[^\n#].{3}(?<!<!--)(?<!\!Mer).*)\n*)+))|(?:Synonym *\n+((?:(?:^[^\n#].{0,2}$|^[^\n#].{3}(?<!<!--)(?<!\!Mer).*)\n*)+))|(?:Definition *\n+((?:(?:^[^\n#].{0,2}$|^[^\n#].{3}(?<!<!--)(?<!\!Mer).*)\n*)+))|(?:(.+) *\n+(?:(\!\[\[.*\]\])\n*)?((?:(?:^[^\n#].{0,2}$|^[^\n#].{3}(?<!<!--)(?<!\!Mer).*)\n*)+)))(?:!Merke((?:\n(?:^[^\n#].{0,2}$|^[^\n#].{3}(?<!<!--).*))+))?'
+    fields:
+      - Context: CONTEXT
+      - Sonstige Frage: 4
+      - Sonstige Antwort: 6
+      - Link: LINK
+globals:
+  anki:
+    deck_name: Default
+    tags:
+      - Obsidian
+    url: http://localhost:8765

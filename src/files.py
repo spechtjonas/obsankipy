@@ -25,8 +25,8 @@ class IDFileLocation:
         self.position = position
         self.id = id_number
 
-    def get_id_string(self):
-        return f"<!--ID: {self.id}-->\n"
+    def get_id_string(self) -> str:
+        return f"\n<!--ID: {self.id}-->"
 
 
 class FileNoteMetadata:
@@ -67,9 +67,10 @@ class File:
     original_hash: str
     curr_hash: str
 
-    def __init__(self, filepath, vault_name):
-        self.path = filepath
-        self.file_name = os.path.basename(filepath)
+    def __init__(self, file_path, vault_path, vault_name):
+        self.path = file_path
+        self.relative_path = os.path.relpath(self.path, vault_path)
+        self.file_name = os.path.basename(self.path)
         self.read_file()
         self.original_hash = compute_hash(self.original_file_content.encode("utf-8"))
         self.curr_hash = self.original_hash
@@ -152,12 +153,11 @@ class File:
         return hashlib.sha256(self.original_file_content.encode("utf-8")).hexdigest()
 
     def overwrite_content_with_new_ids(self, ids: List[IDFileLocation]) -> None:
-        """
-        this method will overwrite the file content with the new ID created by anki
-        """
         curr_text = self.curr_file_content
+        # Insert IDs at calculated positions
         self.curr_file_content = string_insert(
-            curr_text, [(id.position, id.get_id_string()) for id in ids]
+            curr_text,
+            [(id.position, id.get_id_string()) for id in ids]
         )
 
     def get_id_file_location_from_added_notes(self) -> List[IDFileLocation]:

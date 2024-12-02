@@ -179,3 +179,9 @@ def setup_root_logger(debug=False):
 
     # Add the handlers to the root logger
     root_logger.addHandler(console_handler)
+
+def convert_listDicts_to_dict(listDicts):
+    """
+    Convert a list of dictionaries into a single dictionary.
+    """
+    return {k: v for d in listDicts for k, v in d.items()}

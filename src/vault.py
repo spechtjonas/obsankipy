@@ -17,7 +17,7 @@ class VaultManager:
     """
 
     vault_name: str
-    dir: Path
+    vault_path: Path
     file_paths: list[Path]
     files: list[File]
     new_files: list[File]
@@ -33,11 +33,11 @@ class VaultManager:
         patterns_to_exclude=None,
         note_types=None,
     ):
-        self.dir = vault_path
-        self.vault_name = os.path.basename(self.dir)
+        self.vault_path = vault_path
+        self.vault_name = os.path.basename(self.vault_path)
         logger.info(f"Vault name: {self.vault_name}")
         self.file_paths = get_files_paths(
-            self.dir,
+            self.vault_path,
             exclude_dirs=exclude_dirs,
             exclude_dotted_dirs=exclude_dotted_dirs,
             patterns_to_exclude=patterns_to_exclude,
@@ -53,7 +53,7 @@ class VaultManager:
 
     def set_files(self):
         self.files = [
-            File(file, vault_name=self.vault_name) for file in self.file_paths
+            File(file_path, vault_path=self.vault_path, vault_name=self.vault_name) for file_path in self.file_paths
         ]
 
     def get_notes_from_new_files(self) -> NotesManager:

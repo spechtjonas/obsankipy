@@ -1,0 +1,1 @@
+python .\src\obsankipy.py .\examples\Obsankipy-Test\.obsankipy\config.yaml --debug
