@@ -67,3 +67,7 @@ class VaultManager:
 
     def get_curr_file_hashes(self):
         return [file.curr_hash for file in self.files]
+    
+    def write_updated_content_to_files(self):
+        for file in self.new_files:
+            file.update_content()

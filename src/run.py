@@ -7,7 +7,6 @@ from anki.manager import (
 from config_parser import NewConfig
 from notes.manager import set_new_ids
 from notes.note import NoteType
-from utils.helpers import erase_note_ids_in_the_files
 from utils.helpers import open_cache, write_hashes_to_file
 from vault import VaultManager
 
@@ -45,21 +44,36 @@ def run(config: NewConfig):
     notes_to_edit = notes_manager.get_all_notes_to_edit()
     notes_to_add = notes_manager.get_all_notes_to_add()
     notes_to_delete = notes_manager.get_all_notes_to_delete()
+
+    # Remove notes from notes_to_edit which are part of notes_to_delete by file id
+    notes_to_edit = [note for note in notes_to_edit if note.id not in {note.id for note in notes_to_delete}]
+
     decks_to_create = notes_manager.get_needed_target_decks()
     anki_requester.create_decks(decks_to_create)
+
+    # Delete notes
     anki_requester.delete_notes(notes_to_delete)
 
-    erase_note_ids_in_the_files([note.source_file.path for note in notes_to_delete])
+    files_with_deleted_notes = notes_manager.get_files_with_deleted_notes()
+    for file in files_with_deleted_notes:
+        file.erase_deleted_ids_from_file_content()
 
-    add_response = anki_requester.adds_new_notes(notes_to_add)
+    # Add new notes
+    add_response = anki_requester.adds_new_notes(notes_to_add)  
+
 
     if add_response:
         set_new_ids(add_response)
-        out_of_date_files = notes_manager.get_out_of_date_files()
-        for file in out_of_date_files:
-            file.write_new_ids_to_file()
+        files_with_added_notes = notes_manager.get_files_with_added_notes()
+        for file in files_with_added_notes:
+            file.write_new_ids_to_file_content()
 
+    # Update existing notes
     anki_requester.updates_existing_notes(notes_to_edit)
+
+    # Rewrite updated files
+    vault.write_updated_content_to_files()
+
     anki_requester.ensure_correct_deck(notes_to_edit)
     anki_requester.store_media_files(medias)
 

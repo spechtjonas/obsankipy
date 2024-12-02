@@ -18,7 +18,7 @@ def main():
     logger = logging.getLogger(__name__)
     logger.info("Starting script")
     try:
-        with open(Path(args.config_path), "r") as f:
+        with open(Path(args.config_path), "r", encoding="UTF-8") as f:
             config = yaml.safe_load(f)
         new_config = NewConfig(**config)
     except Exception as err:

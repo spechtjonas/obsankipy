@@ -11,7 +11,8 @@
             "program": "C:/Users/Jonas/src/obsankipy/src/obsankipy.py",
             "console": "integratedTerminal",
             "args": [
-                "C:/Users/Jonas/src/obsankipy/examples/Obsankipy-Test/.obsankipy/config.yaml"
+                "C:/Users/Jonas/src/obsankipy/examples/Obsankipy-Test/.obsankipy/config.yaml", // C:/Users/Jonas/Cloud/Anki-Inhalte_Kopie/.obsankipy/config.yaml, //
+                "--debug"
             ]
         }
     ]

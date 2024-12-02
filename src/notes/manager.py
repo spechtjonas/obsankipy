@@ -116,8 +116,11 @@ class NotesManager:
 
     def get_media_to_add(self) -> List[Picture]:
         return self.new_medias
+    
+    def get_files_with_deleted_notes(self) -> Set[File]:
+        return set([note.source_file for note in self.notes_to_delete])
 
-    def get_out_of_date_files(self) -> Set["File"]:
+    def get_files_with_added_notes(self) -> Set["File"]:
         return set([note.source_file for note in self.notes_to_add])
 
 

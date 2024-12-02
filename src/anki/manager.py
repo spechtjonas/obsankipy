@@ -10,6 +10,7 @@ from anki.requests import (
     AnkiRetrieveMediaFileRequest,
     AnkiMultiRequest,
     AnkiStoreMediaFileRequest,
+    AnkiCanAddNotesWithErrorDetailRequest,
     AnkiAddNotesRequest,
     AnkiUpdateNoteRequest,
     AnkiFindNotesRequest,
@@ -94,9 +95,15 @@ class AnkiManager:
         here we don't need to use multi, there is already a route to add multiple notes
         we need to return a list of ids of the notes that were added in the form of IDsFileLocation
         """
-        logger.info("adding new notes to anki")
         if not notes:
             return
+        
+        logger.info("checking for errors before adding notes to anki")
+        can_add_notes_with_error_detail_request = AnkiCanAddNotesWithErrorDetailRequest(notes)
+        response = self._invoke_request(can_add_notes_with_error_detail_request)
+
+        logger.info("adding new notes to anki")
+        
         adds_new_notes_request = AnkiAddNotesRequest(notes)
         response = self._invoke_request(adds_new_notes_request)
         add_response = list(zip(notes, response))

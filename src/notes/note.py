@@ -85,7 +85,7 @@ class Note:
         self.note_end_span = note_match.end()
         self.curr_note_text = self.original_note_text
         self.target_deck = target_deck
-        self.tags = self.file_note_metadata.tags
+        self.tags = self.convert_tags(self.file_note_metadata.tags)
 
         self.medias = list()
         self.audios = list()
@@ -95,12 +95,20 @@ class Note:
 
         self.options = NoteOptions()
 
+    def convert_tags(self, tags):
+        converted_tags = []
+        for tag in tags:
+            if tag.startswith("#"):
+                tag = tag[1:]  # Remove the leading '#'
+            converted_tag = tag.replace("/", "::")
+            converted_tags.append(converted_tag)
+        return converted_tags
 
     def check_state(self, named_captures):
-        if named_captures["delete"] is not None:
+        if named_captures.get("delete") is not None:
             self.state = State.MARKED_FOR_DELETION
             self.id = int(named_captures["id_num"])
-        elif named_captures["id_num"] is not None:
+        elif named_captures.get("id_num") is not None:
             self.state = (
                 State.UNKNOWN
             )  # this id may exist in anki, we need to check later
@@ -150,6 +158,11 @@ class Note:
         self.state = state
 
     def create_fields(self):
+
+        if self.note_type == None:
+            fields = []
+            return
+
         if (
             self.note_type.note_type == NoteVariant.BASIC
             or self.note_type.note_type == NoteVariant.BASIC_AND_REVERSED_CARD
@@ -182,6 +195,8 @@ class Note:
                 if isinstance(value, int):
                     # Use integer value as match group index
                     field_text = self.note_match.group(value)
+                    if field_text is None:
+                        continue
                     field = CustomField(field_text, vault_name, field_name)
                     self.fields.append(field)
                 elif value == "CONTEXT":
@@ -209,6 +224,7 @@ class Note:
                     field.get_field_name(): field.get_field_value()
                     for field in self.fields
                 },
+                "options": {"allowDuplicate": True}
             }
         else:  # to be used with updateNote in anki
             return {

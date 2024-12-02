@@ -12,29 +12,24 @@ from pathlib import Path
 from typing import List
 
 from utils.constants import SUPPORTED_TEXT_EXTS
-from utils.patterns import ID_DELETE_REGEX
+from utils.patterns import DELETE_REGEXES
 
 logger = logging.getLogger(__name__)
 
 
 def overwrite_file_safely(file_path, contents):
-    # Create a temporary file
-    with tempfile.NamedTemporaryFile(mode="w", delete=False) as temp_file:
+    # Create temp file with UTF-8 encoding
+    with tempfile.NamedTemporaryFile(mode='w', encoding='utf-8', delete=False) as temp_file:
         temp_path = temp_file.name
-        # Write contents to the temporary file
         temp_file.write(contents)
 
     try:
-        # Replace the original file with the temporary file
+        # Replace original with temp file
         shutil.move(temp_path, file_path)
-        logger.info(f"File '{file_path}' successfully overwritten.")
-
-    except Exception as err:
-        # If an error occurs, remove the temporary file
-        os.remove(temp_path)
-        raise Exception(
-            f"Error writing to file. Temporary file removed. Original error: {err}"
-        ) from err
+    except Exception as e:
+        logger.error(f"Failed to overwrite file {file_path}: {e}")
+        os.unlink(temp_path)  # Clean up temp file
+        raise
 
 
 def string_insert(string, position_inserts):
@@ -93,7 +88,8 @@ def erase_note_ids_in_the_files(file_paths: List[Path]):
 def erase_note_id_in_the_file(file_path: Path):
     with open(file_path, "r") as f:
         file_content = f.read()
-    file_content = re.sub(ID_DELETE_REGEX, "", file_content)
+    for regex in DELETE_REGEXES:
+        file_content = re.sub(regex, "", file_content)
     overwrite_file_safely(file_path, file_content)
 
 

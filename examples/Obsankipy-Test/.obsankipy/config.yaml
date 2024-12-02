@@ -5,6 +5,8 @@ vault:
   exclude_dotted_dirs_from_scan: true # excludes directories that start with a dot
   exclude_dirs_from_scan:
     - 000 - MOCs
+    - 200 - Altklausuren
+    - 900 - Templates
   file_patterns_to_exclude:
     - ".*" # excludes files that start with a dot
     - "_*" # excludes files that start with an underscore
@@ -14,8 +16,13 @@ notetypes:
         - '^#+ (?:(?:Abkürzung *\n+((?:(?:^[^\n#].{0,2}$|^[^\n#].{3}(?<!<!--)(?<!\!Mer).*)\n*)+))|(?:Synonym *\n+((?:(?:^[^\n#].{0,2}$|^[^\n#].{3}(?<!<!--)(?<!\!Mer).*)\n*)+))|(?:Definition *\n+((?:(?:^[^\n#].{0,2}$|^[^\n#].{3}(?<!<!--)(?<!\!Mer).*)\n*)+))|(?:(.+) *\n+(?:(\!\[\[.*\]\])\n*)?((?:(?:^[^\n#].{0,2}$|^[^\n#].{3}(?<!<!--)(?<!\!Mer).*)\n*)+)))(?:!Merke((?:\n(?:^[^\n#].{0,2}$|^[^\n#].{3}(?<!<!--).*))+))?'
     fields:
       - Context: CONTEXT
+      - Abkürzung: 1
+      - Synonym: 2
+      - Definition: 3
       - Sonstige Frage: 4
+      - Bild: 5
       - Sonstige Antwort: 6
+      - Merkhilfe: 7
       - Link: LINK
 globals:
   anki:

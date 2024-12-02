@@ -10,6 +10,7 @@ import frontmatter
 
 from notes.note import Note
 from utils.patterns import ID_REGEX_PATTERN
+from utils.patterns import DELETE_REGEXES
 from utils.helpers import string_insert, overwrite_file_safely, compute_hash
 
 
@@ -122,11 +123,12 @@ class File:
         """
         this method will scan the file content for notes
         """
+        print("Scanning file", self.path)
 
         for note_type in note_types:
             for regex in note_type.regexes:
                 full_regex = regex + ID_REGEX_PATTERN
-                regex = re.compile(full_regex, re.MULTILINE)
+                regex = re.compile(full_regex, re.MULTILINE | re.UNICODE)  # | re.DEBUG for debugging
 
                 for match in regex.finditer(self.curr_file_content):
                     note = Note(
@@ -137,6 +139,19 @@ class File:
                         file_note_metadata=self.file_note_metadata,
                     )
                     self.found_notes.append(note)
+
+        for regex in DELETE_REGEXES:
+            for match in regex.finditer(self.curr_file_content):
+                note = Note(
+                    note_match=match,
+                    source_file=self,
+                    target_deck=self.target_deck,
+                    note_type=None,
+                    file_note_metadata=self.file_note_metadata,
+                )
+                self.found_notes.append(note)
+        
+      
         logger.debug(f"found {len(self.found_notes)} notes in file {self.path}")
         return self.found_notes
 
@@ -168,18 +183,22 @@ class File:
             IDFileLocation(note.id_location_in_file, note.id)
             for note in self.to_add_notes
         ]
-
-    def write_new_content(self) -> None:
+    
+    def erase_deleted_ids_from_file_content(self):
         """
-        this method will write the new content to the file
+        this method will remove the deleted ids from the file
         """
-        overwrite_file_safely(self.path, self.curr_file_content)
+        for regex in DELETE_REGEXES:
+            self.curr_file_content = re.sub(regex, "", self.curr_file_content)
 
-    def write_new_ids_to_file(self):
+        
+
+    def write_new_ids_to_file_content(self):
         id_locations = self.get_id_file_location_from_added_notes()
         self.overwrite_content_with_new_ids(id_locations)
-        self.write_new_content()
-        self.recompute_hash()
 
     def recompute_hash(self):
         self.curr_hash = compute_hash(self.curr_file_content.encode("utf-8"))
+
+    def update_content(self):
+        overwrite_file_safely(self.path, self.curr_file_content)

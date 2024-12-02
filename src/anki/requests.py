@@ -76,6 +76,53 @@ class AnkiAddNotesRequest:
         return self.__dict__
 
 
+class AnkiCanAddNotesWithErrorDetailRequest:
+    """
+        {
+        "action": "canAddNotesWithErrorDetail",
+        "version": 6,
+        "params": {
+            "notes": [
+                {
+                    "deckName": "Default",
+                    "modelName": "Basic",
+                    "fields": {
+                        "Front": "front content",
+                        "Back": "back content"
+                    },
+                    "tags": [
+                        "yomichan"
+                    ]
+                },
+                {
+                    "deckName": "Default",
+                    "modelName": "Basic",
+                    "fields": {
+                        "Front": "front content 2",
+                        "Back": "back content 2"
+                    },
+                    "tags": [
+                        "yomichan"
+                    ]
+                }
+            ]
+        }
+    }
+    """
+
+    notes: List[Note]
+
+    def __init__(self, notes: List[Note]):
+        self.action = "canAddNotesWithErrorDetail"
+        self.version = 6
+        self.params = {"notes": [note.to_anki_dict() for note in notes]}
+
+    def to_anki_dict(self):
+        return self.__dict__
+
+
+
+
 class AnkiMultiRequest:
     """
         ex:

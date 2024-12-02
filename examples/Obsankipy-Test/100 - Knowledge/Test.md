@@ -1,36 +1,26 @@
----
-tags:
-    - "#fach/test"
----
-# Style
+# Abkürzung
 
-This style is suitable for having the header as the front, and the answer as the back
-<!--ID: 1732732088512-->
+Abasdf
 
-# Overall heading
+# Prinzip
 
-## Subheading
+- Angabe als siebenstelliger Code fur jede Einzelverletzung unter Berücksichtigung von
+  - Körperregion (1. Ziffer)
+  - Art der Verletzung (2.–6. Ziffer)
+  - Verletzungsschwere (7. Ziffer)
 
-You're allowed to nest headers within each other
-<!--ID: 1732732088514-->
+# Verwendung
 
-## Subheading 2
+- Grundlage verschiedener Scores zur Bewertung der Gesamtverletzungsschwere
+  - [[Injury Severity Score]] (ISS)
+  - New Injury Severity Score (NISS)
+  - Maximum Abbreviated Injury Scale (MAIS)
 
-It'll take the deepest level for the question!!!
-<!--ID: 1732732088515-->
+# Codierung der Verletzungsschwere
 
-## Will it detect changes tho?
-
-YES!!!!!!!
-<!--ID: 1732732088516-->
-
-## Subheading 3
-
-### Heading 3
-
-### Heading correct
-
-It'll even
-Span over
-Multiple lines, and ignore preceding whitespace
-<!--ID: 1732732088517-->
+- 1: leicht
+- 2: moderat
+- 3: schwer, nicht lebensbedrohlich
+- 4: lebensbedrohlich
+- 5: kritisch, Überleben unsicher
+- 6: tödlich, nicht behandelbar
