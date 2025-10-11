@@ -157,3 +157,29 @@ class NewConfig(BaseModel):
             return Path(v)
         else:
             return Path(info.data["vault"].dir_path / ".obsankipy")
+
+    @staticmethod
+    def _normalize_path(raw: str | None, base_dir: Path) -> str | None:
+        if raw is None:
+            return None
+        path = Path(raw)
+        isAbsolutePath = path.is_absolute()
+        if isAbsolutePath:
+            return str(path)
+        normalizedPath = (base_dir / path).resolve()
+        return str(normalizedPath)
+
+    @classmethod
+    def from_dict(cls, data: dict, *, base_dir: Path) -> "NewConfig":
+        data = data.copy()
+
+        vault_cfg = data.get("vault")
+        if isinstance(vault_cfg, dict):
+            for key in ("dir_path", "medias_dir_path"):
+                if key in vault_cfg:
+                    vault_cfg[key] = cls._normalize_path(vault_cfg[key], base_dir)
+
+        if "hashes_cache_dir" in data:
+            data["hashes_cache_dir"] = cls._normalize_path(data["hashes_cache_dir"], base_dir)
+
+        return cls(**data)

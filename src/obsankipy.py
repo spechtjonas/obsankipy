@@ -18,9 +18,10 @@ def main():
     logger = logging.getLogger(__name__)
     logger.info("Starting script")
     try:
-        with open(Path(args.config_path), "r", encoding="UTF-8") as f:
+        config_path = Path(args.config_path)
+        with open(config_path, "r", encoding="UTF-8") as f:
             config = yaml.safe_load(f)
-        new_config = NewConfig(**config)
+        new_config = NewConfig.from_dict(config, base_dir=config_path.parent)
     except Exception as err:
         logger.error(f"Error parsing config file: {err}")
         raise Exception(f"Error parsing config file: {err}") from err

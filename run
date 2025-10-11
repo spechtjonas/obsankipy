@@ -1,1 +1,1 @@
-python .\src\obsankipy.py .\examples\Obsankipy-Test\.obsankipy\config.yaml --debug
+python .\src\obsankipy.py C:\Users\Jonas\Cloud\Anki-Inhalte\_obsankipy-config.yaml --debug
