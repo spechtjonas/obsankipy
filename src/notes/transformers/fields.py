@@ -64,6 +64,9 @@ def create_code_blocks_transformer(text: str) -> str:
 def strip_paragraph_tags(text: str) -> str:
     return text.replace("<p>", "").replace("</p>", "")
 
+def remove_blockquote(text: str) -> str:
+    return text.replace("<blockquote>\n", "> ").replace("</blockquote>", "")
+
 
 def format_pictures_to_html_transformer(text: str) -> str:
     """

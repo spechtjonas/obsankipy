@@ -8,10 +8,10 @@
             "name": "Python Debugger: Current File with Arguments",
             "type": "debugpy",
             "request": "launch",
-            "program": "./src/obsankipy.py",
+            "program": "obsankipy.py",
             "console": "integratedTerminal",
             "args": [
-                "./config.yaml"
+                "../config.yaml"
             ]
         }
     ]

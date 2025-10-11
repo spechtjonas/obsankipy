@@ -6,9 +6,9 @@ import os
 import re
 from typing import List
 
-import frontmatter
-
 from notes.note import Note
+
+import frontmatter
 from utils.patterns import ID_REGEX_PATTERN
 from utils.patterns import DELETE_REGEXES
 from utils.helpers import string_insert, overwrite_file_safely, compute_hash
@@ -54,7 +54,7 @@ class File:
 
     file_name: str
     path: str
-    file_note_metadata: FileNoteMetadata
+    file_note_metadata: "FileNoteMetadata"
     curr_file_content: str
     content_len: int
     original_file_content: str
@@ -64,7 +64,7 @@ class File:
     tags: List[str]
     target_deck: str
     frontmatter: dict
-    to_add_notes: List[Note]
+    to_add_notes: List["Note"]
     original_hash: str
     curr_hash: str
 
@@ -111,15 +111,21 @@ class File:
 
     def get_target_deck(self) -> str:
         """
-        this method will return the target deck of the file
+        Returns the target deck of the file.
+        If not specified in the frontmatter, it uses the relative directory path as the deck name.
         """
         target_deck_variants = ["deck", "target deck", "target_deck"]
         for variant in target_deck_variants:
             if variant in self.frontmatter:
                 return self.frontmatter[variant]
-        return "Default"
+        
+        # Get the directory path relative to the vault
+        relative_dir = os.path.dirname(self.relative_path)
+        # Replace path separators with Anki's deck hierarchy separator "::"
+        deck_name = relative_dir.replace(os.sep, "::")
+        return deck_name
 
-    def scan_file(self, note_types: List["NoteType"]) -> List["Note"]:
+    def scan_file(self, note_types: List[any]) -> List["Note"]:
         """
         this method will scan the file content for notes
         """

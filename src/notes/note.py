@@ -10,6 +10,7 @@ from notes.fields import (
     ContextField,
     LinkField,
 )
+
 from media import Picture, Audio
 from utils.helpers import convert_listDicts_to_dict
 from utils.patterns import (
@@ -98,6 +99,8 @@ class Note:
     def convert_tags(self, tags):
         converted_tags = []
         for tag in tags:
+            if tag == None:
+                continue
             if tag.startswith("#"):
                 tag = tag[1:]  # Remove the leading '#'
             converted_tag = tag.replace("/", "::")
@@ -184,7 +187,7 @@ class Note:
                 )
             ]
 
-        elif self.note_type.note_type == NoteVariant.OBSIDIAN:
+        elif self.note_type.note_type == NoteVariant.OBSIDIAN or self.note_type.note_type == NoteVariant.ALTKLAUSUREN:
 
             vault_name = self.source_file.file_note_metadata.vault_name
             file_name = self.source_file.file_name
@@ -288,6 +291,7 @@ class NoteVariant(enum.Enum):
     BASIC_AND_REVERSED_CARD = enum.auto()
     BASIC_TYPE_ANSWER = enum.auto()
     OBSIDIAN = enum.auto()
+    ALTKLAUSUREN = enum.auto()
 
     def get_string(self):
         mapping = {
@@ -296,6 +300,7 @@ class NoteVariant(enum.Enum):
             NoteVariant.BASIC_AND_REVERSED_CARD: "Basic (and reversed card)",
             NoteVariant.BASIC_TYPE_ANSWER: "Basic (type in the answer)",
             NoteVariant.OBSIDIAN: "Obsidian",
+            NoteVariant.ALTKLAUSUREN: "Altklausuren",
         }
         return mapping.get(self)
 

@@ -53,20 +53,35 @@ def run(config: NewConfig):
 
     # Delete notes
     anki_requester.delete_notes(notes_to_delete)
+    
 
     files_with_deleted_notes = notes_manager.get_files_with_deleted_notes()
     for file in files_with_deleted_notes:
         file.erase_deleted_ids_from_file_content()
 
-    # Add new notes
-    add_response = anki_requester.adds_new_notes(notes_to_add)  
+    if notes_to_add != []:
+        check_new_response = anki_requester.check_new_notes(notes_to_add)
+        
+        # Filter notes that can be added based on check response and log errors
+        notes_to_add_clean = []
+        notes_with_responses = []
+        if check_new_response is not None:
+            notes_with_responses = zip(notes_to_add, check_new_response)
+        for note, check in notes_with_responses:
+            if check.get('canAdd', True):
+                notes_to_add_clean.append(note)
+            else:
+                logger.error(f"Cannot add note from file '{note.source_file.file_name}': {note.curr_note_text}")
+
+        # Add new notes
+        add_response = anki_requester.adds_new_notes(notes_to_add_clean)  
 
 
-    if add_response:
-        set_new_ids(add_response)
-        files_with_added_notes = notes_manager.get_files_with_added_notes()
-        for file in files_with_added_notes:
-            file.write_new_ids_to_file_content()
+        if add_response:
+            set_new_ids(add_response)
+            files_with_added_notes = notes_manager.get_files_with_added_notes()
+            for file in files_with_added_notes:
+                file.write_new_ids_to_file_content()
 
     # Update existing notes
     anki_requester.updates_existing_notes(notes_to_edit)

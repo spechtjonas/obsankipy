@@ -8,7 +8,8 @@ from notes.transformers.fields import (
     format_audio_to_html_transformer,
     to_anki_math_transformer,
     create_code_blocks_transformer,
-    strip_paragraph_tags
+    strip_paragraph_tags,
+    remove_blockquote
 )
 from notes.transformers.utils import create_link
 
@@ -125,7 +126,8 @@ class CustomField:
             to_anki_math_transformer,
             create_code_blocks_transformer,
             links_creator_transformer,
-            strip_paragraph_tags
+            strip_paragraph_tags,
+            remove_blockquote
         ]
 
     def transform(self):

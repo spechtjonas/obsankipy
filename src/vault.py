@@ -18,6 +18,7 @@ class VaultManager:
 
     vault_name: str
     vault_path: Path
+    vault_path_abs: Path
     file_paths: list[Path]
     files: list[File]
     new_files: list[File]
@@ -34,7 +35,8 @@ class VaultManager:
         note_types=None,
     ):
         self.vault_path = vault_path
-        self.vault_name = os.path.basename(self.vault_path)
+        self.vault_path_abs = os.path.abspath(vault_path)
+        self.vault_name = os.path.basename(self.vault_path_abs)
         logger.info(f"Vault name: {self.vault_name}")
         self.file_paths = get_files_paths(
             self.vault_path,

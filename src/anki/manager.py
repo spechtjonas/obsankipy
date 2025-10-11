@@ -90,7 +90,7 @@ class AnkiManager:
         response = self._invoke_request(multi_request)
         logger.debug(f"stored the following media files in anki: {response}")
 
-    def adds_new_notes(self, notes: List[Note]) -> Optional[List[Tuple[Note, int]]]:
+    def check_new_notes(self, notes: List[Note]) -> Optional[List[Tuple[Note, int]]]:
         """
         here we don't need to use multi, there is already a route to add multiple notes
         we need to return a list of ids of the notes that were added in the form of IDsFileLocation
@@ -101,7 +101,16 @@ class AnkiManager:
         logger.info("checking for errors before adding notes to anki")
         can_add_notes_with_error_detail_request = AnkiCanAddNotesWithErrorDetailRequest(notes)
         response = self._invoke_request(can_add_notes_with_error_detail_request)
+        return response
 
+    def adds_new_notes(self, notes: List[Note]) -> Optional[List[Tuple[Note, int]]]:
+        """
+        here we don't need to use multi, there is already a route to add multiple notes
+        we need to return a list of ids of the notes that were added in the form of IDsFileLocation
+        """
+        if not notes:
+            return
+        
         logger.info("adding new notes to anki")
         
         adds_new_notes_request = AnkiAddNotesRequest(notes)

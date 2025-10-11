@@ -85,6 +85,7 @@ class NotetypeConfig(BaseModel):
     type_answer: Optional[dict] = {}
     cloze: Optional[dict] = {}
     Obsidian: Optional[dict] = {}
+    Altklausuren: Optional[dict] = {}
 
     def get_note_types(self):
         note_types = []
@@ -121,6 +122,13 @@ class NotetypeConfig(BaseModel):
                 NoteType(
                     note_type=self.Obsidian,
                     note_variant=NoteVariant.OBSIDIAN,
+                )
+            )
+        if self.Altklausuren:
+            note_types.append(
+                NoteType(
+                    note_type=self.Altklausuren,
+                    note_variant=NoteVariant.ALTKLAUSUREN,
                 )
             )
         return note_types
