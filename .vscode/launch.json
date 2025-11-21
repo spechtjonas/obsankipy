@@ -11,7 +11,7 @@
             "program": "./src/obsankipy.py",
             "console": "integratedTerminal",
             "args": [
-                "C:/Users/Jonas/Cloud/Anki-Inhalte/_obsankipy-config.yaml"
+                "/Users/jonas/Nextcloud/Anki-Inhalte/_obsankipy-config.yaml"
             ]
         }
     ]

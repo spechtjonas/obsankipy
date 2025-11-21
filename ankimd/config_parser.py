@@ -4,7 +4,7 @@ from typing import List, Optional
 
 import os
 
-from notes.note import NoteType, NoteVariant
+from ankimd.notes.note import NoteType, NoteVariant
 
 logger = logging.getLogger(__name__)
 
@@ -142,32 +142,32 @@ class NewConfig(BaseModel):
     globals: GlobalConfig
     vault: VaultConfig
     notetypes: NotetypeConfig
-    # regex: Optional[RegexConfig]
-    # mapping: Optional[MappingConfig]
     hashes_cache_dir: Annotated[str, Field(validate_default=True)] = ""
 
     def get_note_types(self):
         return self.notetypes.get_note_types()
 
     @field_validator("hashes_cache_dir", mode="after")
-    def dir_path_must_exist(cls, v, info: ValidationInfo):
+    def normalize_hashes_cache_dir(cls, v, info: ValidationInfo):
+        """Normalize the hashes cache directory path, but don't require it to exist."""
         if v:
-            if not os.path.exists(v):
-                raise ValueError(f"Path {v} does not exist")
-            return Path(v)
+            path = Path(v)
+            # Don't validate existence - the directory will be created if needed
+            return path
         else:
-            return Path(info.data["vault"].dir_path / ".obsankipy")
+            # Default to .obsankipy in the vault directory
+            return Path(info.data["vault"].dir_path) / ".obsankipy"
 
     @staticmethod
     def _normalize_path(raw: str | None, base_dir: Path) -> str | None:
         if raw is None:
             return None
         path = Path(raw)
-        isAbsolutePath = path.is_absolute()
-        if isAbsolutePath:
+        if path.is_absolute():
             return str(path)
-        normalizedPath = (base_dir / path).resolve()
-        return str(normalizedPath)
+        # Resolve relative paths against base_dir
+        normalized_path = (base_dir / path).resolve()
+        return str(normalized_path)
 
     @classmethod
     def from_dict(cls, data: dict, *, base_dir: Path) -> "NewConfig":
@@ -179,7 +179,7 @@ class NewConfig(BaseModel):
                 if key in vault_cfg:
                     vault_cfg[key] = cls._normalize_path(vault_cfg[key], base_dir)
 
-        if "hashes_cache_dir" in data:
+        if "hashes_cache_dir" in data and data["hashes_cache_dir"]:
             data["hashes_cache_dir"] = cls._normalize_path(data["hashes_cache_dir"], base_dir)
 
         return cls(**data)

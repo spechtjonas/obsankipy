@@ -3,8 +3,8 @@ import re
 import markdown
 from markdown.extensions.codehilite import CodeHiliteExtension
 
-from notes.transformers.utils import create_link
-from utils.patterns import (
+from ankimd.notes.transformers.utils import create_link
+from ankimd.utils.patterns import (
     IMAGE_FILE_WIKILINK_REGEX,
     AUDIO_FILE_REGEX,
     OBSIDIAN_LINKS_REGEX,

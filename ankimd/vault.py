@@ -1,10 +1,10 @@
 import os
 from pathlib import Path
 
-from files import File
-from notes.note import NoteType
-from notes.manager import NotesManager
-from utils.helpers import get_files_paths
+from ankimd.files import File
+from ankimd.notes.note import NoteType
+from ankimd.notes.manager import NotesManager
+from ankimd.utils.helpers import get_files_paths
 
 import logging
 

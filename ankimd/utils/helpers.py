@@ -11,8 +11,8 @@ import tempfile
 from pathlib import Path
 from typing import List
 
-from utils.constants import SUPPORTED_TEXT_EXTS
-from utils.patterns import DELETE_REGEXES
+from ankimd.utils.constants import SUPPORTED_TEXT_EXTS
+from ankimd.utils.patterns import DELETE_REGEXES
 
 logger = logging.getLogger(__name__)
 
@@ -106,6 +106,9 @@ def compute_hash(file_content: bytes) -> str:
 def clear_file_hashes(hashes_cache_dir):
     try:
         logger.info("Clearing file hashes")
+        # Ensure the parent directory exists
+        hashes_cache_dir = Path(hashes_cache_dir)
+        hashes_cache_dir.parent.mkdir(parents=True, exist_ok=True)
         with open(hashes_cache_dir, "w") as f:
             f.write("[]")
     except FileNotFoundError:
@@ -115,10 +118,15 @@ def clear_file_hashes(hashes_cache_dir):
 def open_cache(hashes_path: Path):
     try:
         logger.info(f"Opening cache file at {hashes_path}")
+        # Ensure the parent directory exists
+        hashes_path.parent.mkdir(parents=True, exist_ok=True)
+        
         with open(hashes_path, "r") as f:
             cache = json.loads(f.read())
         return cache
     except FileNotFoundError:
+        # Create the directory and return empty cache
+        hashes_path.parent.mkdir(parents=True, exist_ok=True)
         return []
 
 
@@ -149,6 +157,8 @@ def setup_cli_parser():
 
 
 def write_hashes_to_file(curr_hashes, hashes_path: Path):
+    # Ensure the parent directory exists before writing
+    hashes_path.parent.mkdir(parents=True, exist_ok=True)
     with open(hashes_path, "w") as f:
         f.write(json.dumps(curr_hashes))
 

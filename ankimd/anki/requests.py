@@ -7,8 +7,8 @@
 
 from typing import Any, List, Protocol
 
-from media import Picture
-from notes.note import Note
+from ankimd.media import Picture
+from ankimd.notes.note import Note
 
 
 class ToAnkiJson(Protocol):

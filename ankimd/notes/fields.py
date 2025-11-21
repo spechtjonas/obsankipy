@@ -2,7 +2,7 @@ from functools import partial
 from typing import Protocol, List, Any
 import re
 
-from notes.transformers.fields import (
+from ankimd.notes.transformers.fields import (
     replace_with_link,
     format_pictures_to_html_transformer,
     format_audio_to_html_transformer,
@@ -11,7 +11,7 @@ from notes.transformers.fields import (
     strip_paragraph_tags,
     remove_blockquote
 )
-from notes.transformers.utils import create_link
+from ankimd.notes.transformers.utils import create_link
 
 
 class NoteField(Protocol):

@@ -1,17 +1,23 @@
 [tool.poetry]
-name = "obsankipy"
+name = "ankimd"
 version = "0.1.0"
 description = ""
-authors = ["Lua <mlcivilengineer@users.noreply.github.com>"]
+authors = ["Jonas Specht <jonas@familie-specht.com>","Lua <mlcivilengineer@users.noreply.github.com>"]
 readme = "README.md"
+packages = [{ include = "ankimd" }]
+
 
 [tool.poetry.dependencies]
-python = "^3.10"
-python-frontmatter = "^1.0.1"
-markdown = "^3.5.1"
-pygments = "^2.17.2"
-requests = "^2.31.0"
-pydantic = "^2.5.2"
+python = ">=3.10"
+python-frontmatter = "^1.1.0"
+markdown = ">=3.5.1"
+pygments = ">=2.17.2"
+requests = ">=2.31.0"
+pydantic = ">=2.5.2"
+setuptools = "^80.9.0"
+
+[tool.poetry.scripts]
+ankimd = "ankimd.__main__:main"
 
 
 [build-system]

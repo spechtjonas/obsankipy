@@ -1,14 +1,14 @@
 import logging
 from typing import List
 
-from anki.manager import (
+from ankimd.anki.manager import (
     AnkiManager,
 )
-from config_parser import NewConfig
-from notes.manager import set_new_ids
-from notes.note import NoteType
-from utils.helpers import open_cache, write_hashes_to_file
-from vault import VaultManager
+from ankimd.config_parser import NewConfig
+from ankimd.notes.manager import set_new_ids
+from ankimd.notes.note import NoteType
+from ankimd.utils.helpers import open_cache, write_hashes_to_file
+from ankimd.vault import VaultManager
 
 logger = logging.getLogger(__name__)
 

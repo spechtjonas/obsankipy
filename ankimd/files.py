@@ -6,12 +6,11 @@ import os
 import re
 from typing import List
 
-from notes.note import Note
+from ankimd.notes.note import Note
 
 import frontmatter
-from utils.patterns import ID_REGEX_PATTERN
-from utils.patterns import DELETE_REGEXES
-from utils.helpers import string_insert, overwrite_file_safely, compute_hash
+from ankimd.utils.patterns import ID_REGEX_PATTERN, DELETE_REGEXES
+from ankimd.utils.helpers import string_insert, overwrite_file_safely, compute_hash
 
 
 class IDFileLocation:
@@ -49,7 +48,7 @@ class File:
     The notes inside the file can be:
         - added (if no ID is found)
         - edited (if the ID found matches one ID in anki)
-        - deleted (if there is a DELETE keyword above the ID) TODO
+        - deleted (if there is a DELETE keyword above the ID)
     """
 
     file_name: str

@@ -1,7 +1,7 @@
 import enum
 from pathlib import Path
 
-from utils.helpers import file_encode
+from ankimd.utils.helpers import file_encode
 
 import logging
 

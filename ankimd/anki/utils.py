@@ -2,7 +2,7 @@ from typing import List, Any, Union, Dict, TypeVar
 
 import requests
 
-from anki.requests import AnkiMultiRequest
+from ankimd.anki.requests import AnkiMultiRequest
 
 T = TypeVar("T", bound="ToAnkiJson")  # Type T has to implement the method to_anki_dict
 

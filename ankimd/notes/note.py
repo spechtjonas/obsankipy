@@ -2,7 +2,7 @@ import enum
 import re
 from typing import List, Optional, Any
 
-from notes.fields import (
+from ankimd.notes.fields import (
     NoteField,
     FrontField,
     BackField,
@@ -11,9 +11,9 @@ from notes.fields import (
     LinkField,
 )
 
-from media import Picture, Audio
-from utils.helpers import convert_listDicts_to_dict
-from utils.patterns import (
+from ankimd.media import Picture, Audio
+from ankimd.utils.helpers import convert_listDicts_to_dict
+from ankimd.utils.patterns import (
     IMAGE_FILE_WIKILINK_REGEX,
     AUDIO_FILE_REGEX,
     IMAGE_FILE_MARKDOWN_REGEX,

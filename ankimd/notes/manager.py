@@ -1,9 +1,9 @@
 from pathlib import Path
 from typing import List, Set, Dict, Tuple, Any, Union
 
-from files import File
-from media import MediaState, Picture, Audio
-from notes.note import Note, State
+from ankimd.files import File
+from ankimd.media import MediaState, Picture, Audio
+from ankimd.notes.note import Note, State
 
 import logging
 

@@ -5,9 +5,9 @@ from pathlib import Path
 
 import yaml
 
-from config_parser import NewConfig
-from run import run
-from utils.helpers import setup_cli_parser, setup_root_logger
+from ankimd.config_parser import NewConfig
+from ankimd.run import run
+from ankimd.utils.helpers import setup_cli_parser, setup_root_logger
 
 
 def main():

@@ -5,7 +5,7 @@ from typing import Dict, List, Set, Tuple, Any, Optional, Union
 
 import requests
 
-from anki.requests import (
+from ankimd.anki.requests import (
     AnkiGetMediaFilesNamesRequest,
     AnkiRetrieveMediaFileRequest,
     AnkiMultiRequest,
@@ -18,10 +18,10 @@ from anki.requests import (
     AnkiDeleteNotesRequest,
     AnkiCreateDeckRequest,
 )
-from anki.utils import _create_multi_request, _parse, T
-from media import Picture
-from notes.note import Note
-from utils.constants import SUPPORTED_IMAGE_EXTS, SUPPORTED_AUDIO_EXTS
+from ankimd.anki.utils import _create_multi_request, _parse, T
+from ankimd.media import Picture
+from ankimd.notes.note import Note
+from ankimd.utils.constants import SUPPORTED_IMAGE_EXTS, SUPPORTED_AUDIO_EXTS
 
 logger = logging.getLogger(__name__)
 
