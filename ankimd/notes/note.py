@@ -1,25 +1,23 @@
 import enum
 import re
-from typing import List, Optional, Any
+from typing import Any, List, Optional
+from urllib.parse import unquote
 
+from ankimd.media import Audio, Picture
 from ankimd.notes.fields import (
-    NoteField,
-    FrontField,
     BackField,
-    CustomField,
     ContextField,
+    CustomField,
+    FrontField,
     LinkField,
+    NoteField,
 )
-
-from ankimd.media import Picture, Audio
 from ankimd.utils.helpers import convert_listDicts_to_dict
 from ankimd.utils.patterns import (
-    IMAGE_FILE_WIKILINK_REGEX,
     AUDIO_FILE_REGEX,
     IMAGE_FILE_MARKDOWN_REGEX,
+    IMAGE_FILE_WIKILINK_REGEX,
 )
-
-from urllib.parse import unquote
 
 
 class State(enum.Enum):
@@ -62,12 +60,7 @@ class Note:
     id_location_in_file: int
 
     def __init__(
-        self,
-        note_match,
-        source_file,
-        target_deck,
-        note_type,
-        file_note_metadata
+        self, note_match, source_file, target_deck, note_type, file_note_metadata
     ):
         """
         based on the match, source file, target deck and note type
@@ -139,7 +132,6 @@ class Note:
         while text.endswith("\n"):
             self.id_location_in_file -= 1
             text = text[:-1]
-            
 
     def find_medias(self):
         for match in IMAGE_FILE_WIKILINK_REGEX.finditer(self.original_note_text):
@@ -187,8 +179,10 @@ class Note:
                 )
             ]
 
-        elif self.note_type.note_type == NoteVariant.OBSIDIAN or self.note_type.note_type == NoteVariant.ALTKLAUSUREN:
-
+        elif (
+            self.note_type.note_type == NoteVariant.OBSIDIAN
+            or self.note_type.note_type == NoteVariant.ALTKLAUSUREN
+        ):
             vault_name = self.source_file.file_note_metadata.vault_name
             file_name = self.source_file.file_name
 
@@ -199,13 +193,15 @@ class Note:
                     # Use integer value as match group index
                     field_text = self.note_match.group(value)
                     if field_text is None:
-                        continue
+                        field_text = ""
                     field = CustomField(field_text, vault_name, field_name)
                     self.fields.append(field)
                 elif value == "CONTEXT":
                     relative_path = self.source_file.relative_path
                     file_text = self.source_file.curr_file_content
-                    note_hierarchy = self.get_heading_hierarchy(file_text, self.note_start_span)
+                    note_hierarchy = self.get_heading_hierarchy(
+                        file_text, self.note_start_span
+                    )
 
                     field = ContextField(relative_path, note_hierarchy, field_name)
                     self.fields.append(field)
@@ -227,7 +223,7 @@ class Note:
                     field.get_field_name(): field.get_field_value()
                     for field in self.fields
                 },
-                "options": {"allowDuplicate": True}
+                "options": {"allowDuplicate": True},
             }
         else:  # to be used with updateNote in anki
             return {
@@ -240,48 +236,48 @@ class Note:
                     for field in self.fields
                 },
             }
-        
+
     def get_heading_hierarchy(self, text, position):
         # Regex pattern to match Markdown headings (ATX style)
-        heading_regex = re.compile(r'^(#{1,6})\s+(.*)', re.MULTILINE)
-        
+        heading_regex = re.compile(r"^(#{1,6})\s+(.*)", re.MULTILINE)
+
         # Find all headings in the markdown text
         headings = []
         for match in heading_regex.finditer(text):
             level = len(match.group(1))  # Number of '#' symbols indicates the level
             heading_text = match.group(2).strip()
             start_pos = match.start()
-            
+
             # Store heading details
-            headings.append({
-                'level': level,
-                'text': heading_text,
-                'position': start_pos
-            })
-        
+            headings.append(
+                {"level": level, "text": heading_text, "position": start_pos}
+            )
+
         # Initialize hierarchy
         hierarchy = []
         current_level_headings = {}
-        
+
         # Process headings up to the given position
         for heading in headings:
-            if heading['position'] > position:
+            if heading["position"] > position:
                 break  # We've passed the position; stop processing
-            
-            level = heading['level']
-            text = heading['text']
-            
+
+            level = heading["level"]
+            text = heading["text"]
+
             # Update current level headings
             current_level_headings[level] = text
-            
+
             # Remove deeper levels
             keys_to_remove = [lvl for lvl in current_level_headings if lvl > level]
             for key in keys_to_remove:
                 del current_level_headings[key]
-            
+
             # Build hierarchy
-            hierarchy = [current_level_headings[lvl] for lvl in sorted(current_level_headings)]
-        
+            hierarchy = [
+                current_level_headings[lvl] for lvl in sorted(current_level_headings)
+            ]
+
         return hierarchy
 
 
