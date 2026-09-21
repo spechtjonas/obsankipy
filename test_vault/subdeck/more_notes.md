@@ -5,3 +5,7 @@ O(log n)
 # What does CPU stand for?
 Central Processing Unit
 <!--ID: 1780916427784-->
+
+# A New Note
+Yay!
+<!--ID: 1790024304789-->

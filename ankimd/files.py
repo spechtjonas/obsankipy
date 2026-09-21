@@ -207,3 +207,4 @@ class File:
 
     def update_content(self):
         overwrite_file_safely(self.path, self.curr_file_content)
+        self.recompute_hash()
