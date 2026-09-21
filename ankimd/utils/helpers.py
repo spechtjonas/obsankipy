@@ -123,6 +123,12 @@ def open_cache(hashes_path: Path):
         
         with open(hashes_path, "r") as f:
             cache = json.loads(f.read())
+        if cache and isinstance(cache[0], str):
+            # Old cache format (bare content hashes, no path). Discard it so
+            # every file gets rescanned once and the new path-aware cache
+            # format is written back on this run.
+            logger.info("Old-format hash cache detected, discarding it to force a full rescan")
+            return []
         return cache
     except FileNotFoundError:
         # Create the directory and return empty cache

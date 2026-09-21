@@ -1,1 +1,1 @@
-python .\src\obsankipy.py C:\Users\Jonas\Cloud\Anki-Inhalte\_obsankipy-config.yaml --debug
+poetry run ankimd test_vault/config.yaml --debug

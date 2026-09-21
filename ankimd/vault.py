@@ -49,8 +49,13 @@ class VaultManager:
         self.note_types = note_types
 
     def set_new_files(self, file_hashes):
+        known_entries = {
+            (entry.get("path"), entry.get("hash")) for entry in file_hashes
+        }
         self.new_files = [
-            file for file in self.files if file.original_hash not in file_hashes
+            file
+            for file in self.files
+            if (file.relative_path, file.original_hash) not in known_entries
         ]
 
     def set_files(self):
@@ -68,7 +73,10 @@ class VaultManager:
         return NotesManager(notes)
 
     def get_curr_file_hashes(self):
-        return [file.curr_hash for file in self.files]
+        return [
+            {"path": file.relative_path, "hash": file.curr_hash}
+            for file in self.files
+        ]
     
     def write_updated_content_to_files(self):
         for file in self.new_files:
